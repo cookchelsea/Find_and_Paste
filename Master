@@ -1,0 +1,20 @@
+Sub SpecialCopy()    
+  Dim targetSh, destinationSh As Worksheet
+  Set targetSh = ThisWorkbook.Worksheets("Page 2")  'Setting initial value to Page 2 which contains assets being searched for
+  Set destinationSh = ThisWorkbook.Worksheets("Page 3")   'Using a second one for use in the final copy statement to the destination sheet
+  
+  Dim i As Long
+  Dim g As Long
+  Dim asset As String 'Using string as asset row may contain all numbers or numbers and letters
+  
+  For g = 1 To Cells(Rows.Count, "A").End(x1Up).row 'Using loop to loop through values in column containing assets being searched for
+     Set targetSh = ThisWorkbook.Worksheets("Page 2") 
+     asset = Cells(g, 1).Value  'Setting asset to next value in Page 2
+     Set targetSh = ThisWorkbook.Worksheets("Page 1") 'Not sure if I should initialize a third worksheet to use as the worksheet containing inventory, or if setting it twice in the loop would work.
+     For i = 1 To Cells(Rows.Count, "F").End(xlUp).row  'Looping through values in inventory to find asset
+       If Cells(i, 3).Value = asset Then
+         Range(Cells(i, 1), Cells(i, 23)).Copy Destination:=destinationSh.Range("A" & targetSh.Cells(Rows.Count, "A").End(xlUp).row + 1)  'Trying to copy the found asset, including all rows from A to W from Page 1 to Page 3
+       End If
+     Next i
+   Next g
+End Sub
